@@ -1,0 +1,214 @@
+/* CSS file placeholder. */
+* { box-sizing:border-box; }
+
+body {
+  background-color: #ECF0F1;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  font-family: 'Roboto';
+  min-width: 360px; 
+  margin: 10px auto 0; 
+  display: block;
+  padding: 10px 30px 40px;
+}
+
+h2 {
+  text-align: center; 
+  margin-bottom: 40px; 
+  font-size: 26px;
+  color: steelblue;
+}
+
+h3 {
+  margin: 10px 0 0;
+  color: darkcyan;
+}
+
+.material-input {
+  position: relative; 
+  margin-bottom: 10px; 
+}
+.material-input input {
+  font-size: 16px;
+  line-height: 21px;
+  padding: 10px 10px 10px 5px;
+  display: block;
+  width: 200px;
+  border: none;
+  border-bottom: 1px solid #757575;
+  background-color: transparent;
+}
+
+.material-input input:focus {
+  outline: none;
+}
+
+.material-input label {
+  color: #999; 
+  font-size: 16px;
+  font-weight: normal;
+  position: absolute;
+  pointer-events: none;
+  left: 5px;
+  top: 10px;
+  transition: 0.2s ease all; 
+  -moz-transition: 0.2s ease all; 
+  -webkit-transition: 0.2s ease all;
+}
+
+.material-input input:focus ~ label, .material-input input:valid ~ label {
+  top: -20px;
+  font-size: 14px;
+  color: darkcyan;
+}
+
+.material-input .bar {
+  position: relative;
+  display: block;
+  width: 200px;
+}
+
+.material-input .bar:before, .material-input .bar:after 	{
+  content: '';
+  height: 1px; 
+  width: 0;
+  bottom: 1px; 
+  position: absolute;
+  background: darkcyan; 
+  transition: 0.2s ease all; 
+  -moz-transition: 0.2s ease all; 
+  -webkit-transition: 0.2s ease all;
+}
+
+.material-input .bar:before {
+  left: 50%;
+}
+
+.material-input .bar:after {
+  right: 50%; 
+}
+
+.material-input input:focus ~ .bar:before, .material-input input:focus ~ .bar:after {
+  width: 50%;
+}
+
+.btn {
+  position: relative;
+  display: block;
+  margin: 3px;
+  padding: 0;
+  overflow: hidden;
+  border-width: 0;
+  outline: none;
+  border-radius: 2px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, .6);
+  background-color: #2ecc71;
+  color: #ecf0f1;
+  transition: background-color .3s;
+}
+
+.btn:hover, .btn:focus {
+  background-color: #27ae60;
+}
+
+.btn > * {
+  position: relative;
+}
+
+.btn span {
+  display: block;
+  padding: 12px 24px;
+}
+
+.btn:before {
+  content: "";
+  
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: block;
+  width: 0;
+  padding-top: 0;
+  border-radius: 100%;
+  background-color: rgba(236, 240, 241, .3);
+  
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+.btn:active:before {
+  width: 120%;
+  padding-top: 120%;
+  transition: width .2s ease-out, padding-top .2s ease-out;
+}
+
+.btn.red {
+  background-color: #e74c3c;
+}
+
+.btn.red:hover, .btn.red:focus {
+  background-color: #c0392b;
+}
+
+#resetBtn {
+  float: left;
+  margin-bottom: 30px;
+}
+
+#updateBtn {
+  float: right;
+  margin-bottom: 30px;
+}
+
+.responstable {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.responstable th, .responstable td {
+  padding: 10px 0;
+  font-size: 16px;
+}
+
+.responstable th {
+  background: steelblue;
+}
+
+.responstable tr td {
+  padding: 12px 0 12px 15px;
+}
+
+.responstable tr td:last-child {
+  padding: 10px 0;
+  text-align: center;
+}
+
+.responstable tr {
+  background: rgba(0, 139, 139, 0.5);
+}
+
+.responstable tr:nth-child(even) {
+  background: rgba(0, 139, 139, 0.3);
+}
+
+.align-left {
+  float: left;
+}
+
+.align-right {
+  float: right;
+}
+
+.row {
+  overflow: auto;
+  margin-top: 15px;
+  margin-bottom: 20px;
+  padding-top: 20px;
+}

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Feature flags</title>
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto">
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <div class="container">
+    <h2>Feature Flags</h2>
+    
+    <form id="cookieForm">
+      <h3>Enable feature flag</h3>
+      <div class="row">
+        <div class="material-input align-left">      
+          <input id="feature-name" type="text" required>
+          <span class="bar"></span>
+          <label>Name</label>
+        </div>
+      
+        <button class="btn align-right" type="submit" id="addFeature"><span>Add</span></button>
+      </div>
+    </form>
+    
+    <button class="btn red" type="button" id="resetBtn"><span>Reset feature flags</span></button>
+    <button class="btn" type="button" id="updateBtn"><span>Fetch features</span></button>
+    
+    <table id="featuresTable" class="responstable row">
+      <tr>
+        <th>Feature name</th>
+        <th>Delete</th>
+      </tr>
+    </table>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

@@ -105,13 +105,13 @@ h3 {
   outline: none;
   border-radius: 2px;
   box-shadow: 0 1px 4px rgba(0, 0, 0, .6);
-  background-color: #2ecc71;
+  background-color: darkcyan;
   color: #ecf0f1;
   transition: background-color .3s;
 }
 
 .btn:hover, .btn:focus {
-  background-color: #27ae60;
+  background-color: #005D5D;
 }
 
 .btn > * {
@@ -121,6 +121,7 @@ h3 {
 .btn span {
   display: block;
   padding: 12px 24px;
+  font-weight: 600;
 }
 
 .btn:before {

@@ -1,17 +1,62 @@
+var features      = null,
+    currentDomain = '',
+    busy          = false;
+
 window.onload = function() {
   document.getElementById('cookieForm').addEventListener('submit', addFeatureFlag);
   document.getElementById('resetBtn').addEventListener('click', resetFeatureFlag);
   document.getElementById('updateBtn').addEventListener('click', updateFeatureFlags);
+  
+  readCookie(updateFeatureFlags);
 };
 
-function addFeatureFlag(e) {
-  e.preventDefault();
+function readCookie(cb) {
+  if (busy) return false;
+  
+  busy = true;
+  readCookieInit(cb);
 
+  setTimeout(function() {
+    readCookieInit(cb);
+    busy = false;
+  }, 500);
+}
+
+function readCookieInit(cb) {
+  features = '';
+
+  chrome.tabs.query({active: true, currentWindow: true}, function(arrayOfTabs) {
+    var activeTab = arrayOfTabs[0];
+    currentDomain = activeTab && arrayOfTabs[0].url ? arrayOfTabs[0].url : currentDomain;
+    
+      chrome.cookies.get({
+        'url': currentDomain,
+        'name': 'features'
+      }, function(cookie) {
+        features = (cookie && cookie.value) ? cookie.value.split(',') : '';
+    
+        return cb();
+      });
+  });
+}
+
+function addFeatureFlag(e) {
   var featureName = document.querySelector('#feature-name').value,
       now = new Date(),
       exHours = 1,
       expires = new Date(now.getTime() + (exHours*60*60*1000)).toUTCString();
   
+  e.preventDefault();
+
+  console.log(features.indexOf(featureName));
+  // the feature is already active, moving on
+  if (features && features !== '' && features.indexOf(featureName) !== -1) {
+    console.log(featureName);
+    return;
+  }
+
+  featureName = features !== '' ? features + ',' + featureName : featureName;
+  document.querySelector('#feature-name').value = '';
   sendCookie(featureName, expires);
 }
 
@@ -25,20 +70,21 @@ function resetFeatureFlag(e) {
 }
 
 function updateFeatureFlags() {
-  var table = document.getElementById("featuresTable");
+  var table, i, y;
   
-  chrome.cookies.getAll({"url":tab[0].url,"name": 'features'},function (cookie){
-    console.log('asdasd');
-    console.log(cookie);
-  });
+  table = document.getElementById("featuresTable");
+  
+  // table.innerHTML = '<table id="featuresTable" class="responstable row"><tbody><tr><th>Feature name</th><th>Delete</th></tr></tbody></table>';
+  table.innerHTML = '<table id="featuresTable" class="responstable row"><tbody><tr><th>Feature name</th></tr></tbody></table>';
 
-  var row = table.insertRow();
+  for (y in features) {
+    var row = table.insertRow();
+    var cell1 = row.insertCell(0);
+    // var cell2 = row.insertCell(1);
   
-  var cell1 = row.insertCell(0);
-  var cell2 = row.insertCell(1);
-  
-  cell1.innerHTML = "NEW CELL1";
-  cell2.innerHTML = "NEW CELL2";
+    cell1.innerHTML = features[y];
+    // cell2.innerHTML = "remove";
+  }
 }
 
 function sendCookie(featureName, expires) {
@@ -46,5 +92,10 @@ function sendCookie(featureName, expires) {
     code: 'document.cookie="features=' + featureName + '; expires=' + expires + '; path=/";'
   }, function() {
     chrome.tabs.reload();
+    readCookie(updateFeatureFlags);
   });
 }
+
+// chrome.cookies.onChanged.addListener(function(tab) {
+//   readCookie(updateFeatureFlags);
+// });

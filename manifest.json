@@ -3,7 +3,7 @@
   "name": "Feature flags",
   "short_name": "Feature flags",
   "description": "",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "minimum_chrome_version": "38",
 
   "icons": {
@@ -19,6 +19,7 @@
   "permissions": [
     "activeTab",
     "cookies",
+    "background",
     "http://*/*",
     "https://*/*"
   ]

@@ -17,6 +17,10 @@ The client website should ideally recognise this information and clean the `feat
 [MIT License](https://github.com/andreasonny83/chrome-feature-flag/blob/master/LICENSE) © Andrea SonnY
 
 ## Changelog
+### 0.0.3
+* updateFeatureFlags bug fixed<br>
+2016.02.20
+
 ### 0.0.2
 * list all the activated features in a table<br>
 2016.02.20

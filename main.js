@@ -5,7 +5,6 @@ var features      = null,
 window.onload = function() {
   document.getElementById('cookieForm').addEventListener('submit', addFeatureFlag);
   document.getElementById('resetBtn').addEventListener('click', resetFeatureFlag);
-  document.getElementById('updateBtn').addEventListener('click', updateFeatureFlags);
   
   readCookie(updateFeatureFlags);
 };

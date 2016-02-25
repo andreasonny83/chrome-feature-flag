@@ -101,9 +101,14 @@ function deleteFeature(event) {
 function updateFeatureFlags() {
   var table, i, y, row, cell1, cell2, featureName;
   
-  table = document.getElementById("featuresTable");
+  table = document.getElementById("features-table");
   
-  table.innerHTML = '<table id="featuresTable" class="responstable row"><tbody><tr><th>Feature name</th><th>Delete</th></tr></tbody></table>';
+  if (features.length > 0) {
+    table.innerHTML = '<tbody><tr><th>Feature name</th><th>Delete</th></tr></tbody>';
+  }
+  else {
+    table.innerHTML = '';
+  }
 
   for (y in features) {
     row = table.insertRow();

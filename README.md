@@ -17,6 +17,14 @@ The client website should ideally recognise this information and clean the `feat
 [MIT License](https://github.com/andreasonny83/chrome-feature-flag/blob/master/LICENSE) © Andrea SonnY
 
 ## Changelog
+### 0.0.6
+*Introducing `Delete feature`<br>
+2016.02.25
+
+### 0.0.5
+* Footer implementation<br>
+2016.02.25
+
 ### 0.0.3
 * updateFeatureFlags bug fixed<br>
 2016.02.20

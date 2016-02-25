@@ -1,6 +1,7 @@
 var features      = null,
     currentDomain = '',
-    busy          = false;
+    busy          = false,
+    featureID     = 0;
 
 window.onload = function() {
   document.getElementById('cookieForm').addEventListener('submit', addFeatureFlag);
@@ -57,18 +58,24 @@ function addFeatureFlag(e) {
       exHours = 1,
       expires = new Date(now.getTime() + (exHours*60*60*1000)).toUTCString();
   
-  e.preventDefault();
+    e.preventDefault();
 
-  console.log(features.indexOf(featureName));
   // the feature is already active, moving on
   if (features && features !== '' && features.indexOf(featureName) !== -1) {
-    console.log(featureName);
     return;
   }
 
   featureName = features !== '' ? features + ',' + featureName : featureName;
   document.querySelector('#feature-name').value = '';
   sendCookie(featureName, expires);
+}
+
+function updateFeatureFlag() {
+  var now = new Date(),
+      exHours = 1,
+      expires = new Date(now.getTime() + (exHours*60*60*1000)).toUTCString();
+
+  sendCookie(features, expires);
 }
 
 function resetFeatureFlag(e) {
@@ -80,23 +87,38 @@ function resetFeatureFlag(e) {
   sendCookie('reset', expires);
 }
 
+function deleteFeature(event) {
+  console.log(event.target.id);
+  console.log(features);
+  var targetFeature = document.getElementById(event.target.id).getAttribute('data-feature');
+  
+  var index = features.indexOf(targetFeature);
+  features.splice(index, 1);
+  console.log(features);
+  updateFeatureFlag();
+}
+
 function updateFeatureFlags() {
-  var table, i, y;
+  var table, i, y, row, cell1, cell2, featureName;
   
   table = document.getElementById("featuresTable");
   
-  // table.innerHTML = '<table id="featuresTable" class="responstable row"><tbody><tr><th>Feature name</th><th>Delete</th></tr></tbody></table>';
-  table.innerHTML = '<table id="featuresTable" class="responstable row"><tbody><tr><th>Feature name</th></tr></tbody></table>';
+  table.innerHTML = '<table id="featuresTable" class="responstable row"><tbody><tr><th>Feature name</th><th>Delete</th></tr></tbody></table>';
 
   for (y in features) {
-    var row = table.insertRow();
-    var cell1 = row.insertCell(0);
-    // var cell2 = row.insertCell(1);
+    row = table.insertRow();
+    cell1 = row.insertCell(0);
+    cell2 = row.insertCell(1);
+    featureName = 'delete-feature-' + featureID;
   
     cell1.innerHTML = features[y];
-    // cell2.innerHTML = "remove";
+    cell2.innerHTML = '<a id="' + featureName +'" data-feature="' + features[y] + '" href="#">delete</a>';
+    
+    document.getElementById(featureName).addEventListener('click', deleteFeature);
+    featureID += 1;
   }
 }
+
 
 function sendCookie(featureName, expires) {
   chrome.tabs.executeScript({

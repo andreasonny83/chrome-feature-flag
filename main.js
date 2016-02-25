@@ -5,9 +5,21 @@ var features      = null,
 window.onload = function() {
   document.getElementById('cookieForm').addEventListener('submit', addFeatureFlag);
   document.getElementById('resetBtn').addEventListener('click', resetFeatureFlag);
+  document.getElementById('github').addEventListener('click', gitHubRepo);
+  document.getElementById('profile').addEventListener('click', gitHubProfile);
   
   readCookie(updateFeatureFlags);
 };
+
+function gitHubRepo() {
+  var url = "https://github.com/andreasonny83/chrome-feature-flag";
+  chrome.tabs.create({ url: url });
+}
+
+function gitHubProfile() {
+  var url = "https://github.com/andreasonny83";
+  chrome.tabs.create({ url: url });
+}
 
 function readCookie(cb) {
   if (busy) return false;

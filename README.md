@@ -17,6 +17,13 @@ The client website should ideally recognise this information and clean the `feat
 [MIT License](https://github.com/andreasonny83/chrome-feature-flag/blob/master/LICENSE) © Andrea SonnY
 
 ## Changelog
+
+### 0.0.8
+* Update the features only once the previous task has terminated
+* vertical scroll on the features table when the feature are more then 3
+* Minor code refactoring<br>
+2016.03.30
+
 ### 0.0.7
 * The feature table is rendered only if at least one feature is present in the list
 * Other minor improvements<br>

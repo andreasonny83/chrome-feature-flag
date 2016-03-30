@@ -31,7 +31,7 @@ function readCookie(cb) {
   setTimeout(function() {
     readCookieInit(cb);
     busy = false;
-  }, 500);
+  }, 1000);
 }
 
 function readCookieInit(cb) {
@@ -42,13 +42,13 @@ function readCookieInit(cb) {
     currentDomain = activeTab && arrayOfTabs[0].url ? arrayOfTabs[0].url : currentDomain;
     
       chrome.cookies.get({
-        'url': currentDomain,
-        'name': 'features'
-      }, function(cookie) {
-        features = (cookie && cookie.value) ? cookie.value.split(',') : '';
+          'url': currentDomain,
+          'name': 'features'
+        }, function(cookie) {
+          features = (cookie && cookie.value) ? cookie.value.split(',') : '';
     
-        return cb();
-      });
+          return cb();
+        });
   });
 }
 
@@ -58,7 +58,10 @@ function addFeatureFlag(e) {
       exHours = 1,
       expires = new Date(now.getTime() + (exHours*60*60*1000)).toUTCString();
   
-    e.preventDefault();
+  e.preventDefault();
+
+  // exit if we are still editing the page cookies
+  if (busy) return false;
 
   // the feature is already active, moving on
   if (features && features !== '' && features.indexOf(featureName) !== -1) {
@@ -66,7 +69,9 @@ function addFeatureFlag(e) {
   }
 
   featureName = features !== '' ? features + ',' + featureName : featureName;
+
   document.querySelector('#feature-name').value = '';
+
   sendCookie(featureName, expires);
 }
 
@@ -79,22 +84,23 @@ function updateFeatureFlag() {
 }
 
 function resetFeatureFlag(e) {
-  e.preventDefault();
-
   var now = new Date(),
       expires = new Date(now.getTime() + 10000).toUTCString();
+
+  e.preventDefault();
+
+  // exit if we are still editing the page cookies
+  if (busy) return false;
   
   sendCookie('reset', expires);
 }
 
 function deleteFeature(event) {
-  console.log(event.target.id);
-  console.log(features);
   var targetFeature = document.getElementById(event.target.id).getAttribute('data-feature');
-  
   var index = features.indexOf(targetFeature);
+
   features.splice(index, 1);
-  console.log(features);
+
   updateFeatureFlag();
 }
 
@@ -104,14 +110,15 @@ function updateFeatureFlags() {
   table = document.getElementById("features-table");
   
   if (features.length > 0) {
-    table.innerHTML = '<tbody><tr><th>Feature name</th><th>Delete</th></tr></tbody>';
-  }
-  else {
+    table.innerHTML = '<thead><tr><th>Feature name</th><th>Delete</th></tr></thead><tbody></tbody>';
+  } else {
     table.innerHTML = '';
   }
 
+  var tableRef = table.getElementsByTagName('tbody')[0];
+
   for (y in features) {
-    row = table.insertRow();
+    row = tableRef.insertRow();
     cell1 = row.insertCell(0);
     cell2 = row.insertCell(1);
     featureName = 'delete-feature-' + featureID;
@@ -124,14 +131,24 @@ function updateFeatureFlags() {
   }
 }
 
-
+/**
+ *  sendCookie
+ * 
+ *  @param {String} featureName   feature flag name
+ *  @param {String} expires       cookie expiration time in seconds
+ */
 function sendCookie(featureName, expires) {
   chrome.tabs.executeScript({
-    code: 'document.cookie="features=' + featureName + '; expires=' + expires + '; path=/";'
-  }, function() {
-    chrome.tabs.reload();
-    readCookie(updateFeatureFlags);
-  });
+     code: 'document.cookie="features=' + featureName + '; expires=' + expires + '; path=/";'
+    }, function() {
+      // Reload the page as the cookie has been injected
+      chrome.tabs.reload();
+      table = document.getElementById("features-table").innerHTML = '';
+
+      // Read the cookies to update the feature flag list
+      readCookie(updateFeatureFlags);
+      readCookie(updateFeatureFlags);
+    });
 }
 
 // chrome.cookies.onChanged.addListener(function(tab) {

@@ -2,8 +2,8 @@
   "manifest_version": 2,
   "name": "Feature flags",
   "short_name": "Feature flags",
-  "description": "",
-  "version": "0.0.7",
+  "description": "Feature flag extension for Google Chrome",
+  "version": "0.0.8",
   "minimum_chrome_version": "38",
 
   "icons": {
@@ -15,7 +15,7 @@
     "default_popup": "index.html",
     "default_title": "Feature flags"
   },
-  
+
   "permissions": [
     "activeTab",
     "cookies",

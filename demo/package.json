@@ -1,0 +1,19 @@
+{
+  "name": "feature-flag-demo",
+  "version": "0.0.1",
+  "description": "Demo website for testing the Feature Flag Chrome extension",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "\"ssh://git@github-sonny/andreasonny83/chrome-feature-flag.git\""
+  },
+  "author": "andreasonny83 <andreasonny83@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "browser-sync": "^2.11.2",
+    "gulp": "^3.9.1"
+  }
+}

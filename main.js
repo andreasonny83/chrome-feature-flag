@@ -46,6 +46,12 @@ function readCookieInit(cb) {
           'name': 'features'
         }, function(cookie) {
           features = (cookie && cookie.value) ? cookie.value.split(',') : '';
+
+          var resetIndex = features.indexOf('reset');
+          
+          if (resetIndex !== -1) {
+            features.splice(resetIndex, 1);
+          }
     
           return cb();
         });
@@ -67,11 +73,11 @@ function addFeatureFlag(e) {
   if (features && features !== '' && features.indexOf(featureName) !== -1) {
     return;
   }
-
-  featureName = features !== '' ? features + ',' + featureName : featureName;
+  
+  featureName = features && features !== '' && features.length > 0 ? features + ',' + featureName : featureName;
 
   document.querySelector('#feature-name').value = '';
-
+  
   sendCookie(featureName, expires);
 }
 
@@ -146,7 +152,6 @@ function sendCookie(featureName, expires) {
       table = document.getElementById("features-table").innerHTML = '';
 
       // Read the cookies to update the feature flag list
-      readCookie(updateFeatureFlags);
       readCookie(updateFeatureFlags);
     });
 }

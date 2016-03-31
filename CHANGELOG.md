@@ -1,8 +1,9 @@
 # Changelog
 
-## 0.1.0 - 2016.03.31
+## 0.1.1 - 2016.03.31
 * delay before adding features fixed
 * demo page for testing the Crome Extension
+* code refactoring and other minor improvements
 
 ## 0.0.8 - 2016.03.30
 * update the features only once the previous task has terminated

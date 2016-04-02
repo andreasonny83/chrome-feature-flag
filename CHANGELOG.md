@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.1 - 2016.04.02
+* new material icon
+* scrrenshot in the Google Chrome market
+* footer social buttons
+
 ## 0.2.0 - 2016.04.02
 * new material design UI
 * documentation updated

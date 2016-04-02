@@ -7,10 +7,22 @@ h1 {
   margin: 15 0;
 }
 
+#features-list {
+  height: 145px;
+  overflow: auto;
+}
+
+#list-element-template {
+  display: none;
+}
+
 .mdl-base__container {
   width: 400px;
 }
 
+/**
+ * Footer
+ */
 .mdl-mini-footer {
   padding: 16px;
 }
@@ -19,11 +31,6 @@ h1 {
   line-height: 28px;
 }
 
-#features-list {
-  height: 145px;
-  overflow: auto;
-}
-
-#list-element-template {
-  display: none;
+.mdl-mini-footer--social-btn, .mdl-mini-footer__social-btn {
+  cursor: pointer;
 }

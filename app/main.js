@@ -15,6 +15,12 @@ window.onload = function() {
     .addEventListener('click', gitHubLicense);
   document.getElementById('demo')
     .addEventListener('click', demoSandbox);
+  document.getElementById('footer-github')
+    .addEventListener('click', gitHubRepo);
+  document.getElementById('footer-google')
+    .addEventListener('click', googlePlus);
+  document.getElementById('footer-email')
+    .addEventListener('click', email);
 
   document.getElementById('version').innerHTML = chrome.app.getDetails().version;
 
@@ -44,6 +50,20 @@ function gitHubLicense() {
 
 function demoSandbox() {
   var url = 'http://sonnywebdesign.com/feature-flag-demo/';
+  chrome.tabs.create({
+    url: url
+  });
+}
+
+function googlePlus() {
+  var url = 'https://plus.google.com/u/0/+AndreaSonny';
+  chrome.tabs.create({
+    url: url
+  });
+}
+
+function email() {
+  var url = 'mailto:andreasonny83@gmail.com';
   chrome.tabs.create({
     url: url
   });

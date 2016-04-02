@@ -4,6 +4,8 @@ A Chrome extension for managing websites feature flags
 
 Demo website available at: [sonnywebdesign.com/feature-flag-demo](http://sonnywebdesign.com/feature-flag-demo).
 
+![Feature flag hero](https://raw.githubusercontent.com/andreasonny83/chrome-feature-flag/master/doc/featureflag-hero.0.2.0.jpg)
+
 ## Usage
 
 This is a Chrome extension for managing with a website hidden features.

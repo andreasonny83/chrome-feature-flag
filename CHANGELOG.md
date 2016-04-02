@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.0 - 2016.04.02
+* new material design UI
+* documentation updated
+* demo sandbox inside the extension
+* other minor code change
+
 ## 0.1.1 - 2016.03.31
 * delay before adding features fixed
 * demo page for testing the Crome Extension

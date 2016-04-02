@@ -1,0 +1,29 @@
+body {
+  height: 600px;
+}
+
+h1 {
+  font-size: 36px;
+  margin: 15 0;
+}
+
+.mdl-base__container {
+  width: 400px;
+}
+
+.mdl-mini-footer {
+  padding: 16px;
+}
+
+.mdl-mini-footer .mdl-logo {
+  line-height: 28px;
+}
+
+#features-list {
+  height: 145px;
+  overflow: auto;
+}
+
+#list-element-template {
+  display: none;
+}

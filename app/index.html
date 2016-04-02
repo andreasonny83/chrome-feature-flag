@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Feature flags</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="lib/material-design-lite/material.min.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="mdl-base mdl-base__container">
+  <div class="mdl-layout mdl-js-layout">
+
+    <main class="mdl-layout__content">
+
+      <h1 class="mdl-typography--text-center mdl-color-text--teal-600">
+        Feature Flags
+      </h1>
+
+      <div class="mdl-grid">
+        <form id="cookieForm" class="mdl-grid mdl-cell mdl-cell--4-col" novalidate>
+          <h4 class="mdl-cell mdl-cell--4-col mdl-color-text--teal-500">
+            Enable feature flag
+          </h4>
+
+          <div class="mdl-cell mdl-cell--3-col">
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+              <input class="mdl-textfield__input" type="text" id="feature-name" pattern="[A-Za-z0-9\-\_]{1,}">
+              <label class="mdl-textfield__label mdl-color-text--teal-500" for="feature-name">
+                Feature flag name
+              </label>
+              <span class="mdl-textfield__error">Invalid feature flag format</span>
+            </div>
+          </div>
+
+          <div class="mdl-cell mdl-cell--1-col mdl-typography--text-right">
+            <button type="submit" id="addFeature"
+              class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored mdl-js-ripple-effect mdl-color--indigo">
+              <i class="material-icons">add</i>
+            </button>
+          </div>
+
+        </form>
+
+        <div class="mdl-grid mdl-grid--no-spacing mdl-typography--text-right">
+          <button id="resetBtn"
+            class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent mdl-cell mdl-cell--4-col">
+            Reset feature flags
+          </button>
+        </div>
+
+        <table id="features-table" class="responstable row"></table>
+
+        <ul id="features-list" class="demo-list-control mdl-list mdl-cell mdl-cell--4-col">
+          <li class="mdl-list__item" id="list-element-template">
+            <span class="mdl-list__item-primary-content">
+              <!-- <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="checkbox-0"> -->
+                <!-- <input type="checkbox" id="checkbox-0" class="mdl-switch__input" checked> -->
+                <span class="mdl-switch__label"></span>
+              <!-- </label> -->
+              <!-- <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="checkbox-0">
+                <input type="checkbox" id="checkbox-0" class="mdl-checkbox__input">
+                <span class="mdl-checkbox__label"></span>
+              </label> -->
+            </span>
+            <span class="mdl-list__item-secondary-action">
+              <button class="mdl-button mdl-js-button mdl-button--icon">
+                <i class="material-icons">delete</i>
+              </button>
+            </span>
+          </li>
+        </ul>
+
+      </div>
+
+      <footer class="mdl-mini-footer">
+        <div class="mdl-mini-footer__left-section">
+          <div class="mdl-logo">
+            Chrome Feature Flags v.<span id="version"></span><br>
+            Developed by <a href="#" id="author" class="mdl-color-text--teal-500">andreasonny83</a>
+          </div>
+          <ul class="mdl-mini-footer__link-list">
+            <li>
+              <a href="#" id="demo">Demo</a>
+            </li>
+            <li>
+              <a href="#" id="github">Help</a>
+            </li>
+            <li>
+              <a href="#" id="license">License</a>
+            </li>
+          </ul>
+        </div>
+        <!-- <div class="mdl-mini-footer__right-section">
+          <button class="mdl-mini-footer__social-btn"></button>
+          <button class="mdl-mini-footer__social-btn"></button>
+          <button class="mdl-mini-footer__social-btn"></button>
+        </div> -->
+      </footer>
+
+    </main>
+  </div>
+
+  <script defer src="lib/material-design-lite/material.min.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>

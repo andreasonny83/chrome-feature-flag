@@ -1,9 +1,10 @@
 # Changelog
 
-## 0.2.3 - 
+## 0.2.3 -
 * add changelog in footer area
 * main.js code refactoring
 * features-list styles updated
+* extra characters bug fixed in index.html
 
 ## 0.2.2 - 2016.04.03
 * gulp task created to automate the deployment process

@@ -1,5 +1,5 @@
 {
-  "name": "Feature flags Chrome extensions",
+  "name": "Feature flags Chrome extension",
   "short_name": "FFCE",
   "icons": [{
         "src": "images/touch/icon-128x128.png",

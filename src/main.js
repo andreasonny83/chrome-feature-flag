@@ -1,3 +1,13 @@
+/**
+ * Feature Flags - Google Chrome extension
+ * @version v0.2.2
+ * @license MIT - http://andreasonny.mit-license.org
+ * @copyright 2016 @andreasonny83
+ * @link https://github.com/andreasonny83/chrome-feature-flag
+ */
+
+'use strict';
+
 var features = null;
 var currentDomain = '';
 var busy = false;

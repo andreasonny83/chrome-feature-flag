@@ -1,8 +1,12 @@
 # Changelog
 
+## 0.2.2 - 2016.04.03
+* gulp task created to automate the deployment process
+* documentation updated
+
 ## 0.2.1 - 2016.04.02
 * new material icon
-* scrrenshot in the Google Chrome market
+* screenshots in the Google Chrome market
 * footer social buttons
 
 ## 0.2.0 - 2016.04.02
@@ -26,7 +30,7 @@
 * other minor improvements
 
 ## 0.0.6 - 2016.02.25
-* introducing `Delete feature`
+* introducing "Delete feature"
 
 ## 0.0.5 - 2016.02.25
 * footer implementation

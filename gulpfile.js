@@ -82,14 +82,14 @@ gulp.task('minifyHtml', function() {
 });
 
 gulp.task('fonts', function() {
-  gulp.src([
+  return gulp.src([
     'src/lib/font-awesome/fonts/*.*'
   ])
   .pipe(gulp.dest('dist/fonts'));
 });
 
 gulp.task('copy', ['fonts'], function() {
-  gulp.src([
+  return gulp.src([
     'src/manifest.json',
     'src/assets/**/*',
   ],{ "base" : "src/" })

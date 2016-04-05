@@ -1,7 +1,7 @@
 /**
  * Feature Flags - Google Chrome extension
  *
- * @license MIT - http://andreasonny.mit-license.org
+ * @license MIT - http://andreasonny.mit-license.org/2016
  * @copyright 2016 @andreasonny83
  * @link https://github.com/andreasonny83/chrome-feature-flag
  */
@@ -54,7 +54,7 @@
   }
   
   function gitHubLicense() {
-    var url = 'http://andreasonny.mit-license.org';
+    var url = 'http://andreasonny.mit-license.org/2016';
     chrome.tabs.create({
       url: url
     });

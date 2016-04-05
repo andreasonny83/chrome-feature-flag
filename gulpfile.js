@@ -26,7 +26,7 @@ var VERSION_BANNER = ['',
   ' * Feature Flags - Google Chrome extension',
   ' * version v.' + pkg.version,
   ' * created by ' + pkg.author,
-  ' * license ' + pkg.license,
+  ' * license ' +  + pkg.license + ' - http://andreasonny.mit-license.org/2016',
 ''].join('\n');
 
 gulp.task('clean', function() {

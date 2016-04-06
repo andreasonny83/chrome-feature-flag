@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.3 - 2016.04.06
+* add changelog in footer area
+* main.js code refactoring
+* features-list styles updated
+* extra characters bug fixed in index.html
+* spinning weel while fetching new data
+
 ## 0.2.2 - 2016.04.03
 * gulp task created to automate the deployment process
 * documentation updated

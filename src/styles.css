@@ -1,7 +1,7 @@
  /**
   * Feature Flags - Google Chrome extension
-  * @version v0.2.2
-  * @license MIT - http://andreasonny.mit-license.org
+  *
+  * @license MIT - http://andreasonny.mit-license.org/2016
   * @copyright 2016 @andreasonny83
   * @link https://github.com/andreasonny83/chrome-feature-flag
   */
@@ -17,21 +17,40 @@ h1 {
 }
 
 #features-list {
-  height: 145px;
+  height: 168px;
   overflow: auto;
+  margin-top: 17px;
+  padding: 0;
 }
 
 #list-element-template {
   display: none;
 }
 
-.mdl-base__container {
-  width: 400px;
+#cookieForm {
+  padding: 0;
+  margin: 0;
+  height: 131px;
 }
 
-/**
- * Footer
- */
+.mdl-base__container {
+  width: 410px;
+}
+
+.mdl-list__item {
+  border-top: 1px solid #CCC;
+}
+
+#features-list .mdl-list__item:last-child {
+  border-bottom: 1px solid #CCC;
+}
+
+#features-list .busy {
+  text-align: center;
+  padding: 25px 0;
+}
+
+/* Footer */
 .mdl-mini-footer {
   padding: 16px;
 }
@@ -42,4 +61,12 @@ h1 {
 
 .mdl-mini-footer--social-btn, .mdl-mini-footer__social-btn {
   cursor: pointer;
+}
+
+.busy.busy__hide.busy--set {
+  display: none;
+}
+
+.busy.busy__show:not(.busy--set) {
+  display: none;
 }

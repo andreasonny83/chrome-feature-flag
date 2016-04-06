@@ -20,16 +20,19 @@
       </h1>
 
       <div class="mdl-grid">
-        <form id="cookieForm" class="mdl-grid mdl-cell mdl-cell--4-col" novalidate>
+        <form id="cookieForm" class="mdl-grid mdl-cell mdl-cell--4-col">
           <h4 class="mdl-cell mdl-cell--4-col mdl-color-text--teal-500">
             Enable feature flag
           </h4>
 
           <div class="mdl-cell mdl-cell--3-col">
-            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+
+            <div class="busy busy__show busy--set mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></div>
+
+            <div class="busy busy__hide busy--set mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
               <input class="mdl-textfield__input" type="text" id="feature-name" pattern="[A-Za-z0-9\-\_]{1,}">
               <label class="mdl-textfield__label mdl-color-text--teal-500" for="feature-name">
-                Feature flag name
+                Feature name
               </label>
               <span class="mdl-textfield__error">Invalid feature flag format</span>
             </div>
@@ -54,7 +57,11 @@
         <table id="features-table" class="responstable row"></table>
 
         <ul id="features-list" class="demo-list-control mdl-list mdl-cell mdl-cell--4-col">
-          <li class="mdl-list__item" id="list-element-template">
+          <li class="busy busy__show busy--set">
+            <div class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></div>
+          </li>
+
+          <li class="busy busy__hide busy--set mdl-list__item" id="list-element-template">
             <span class="mdl-list__item-primary-content">
               <!-- <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="checkbox-0"> -->
                 <!-- <input type="checkbox" id="checkbox-0" class="mdl-switch__input" checked> -->
@@ -89,6 +96,9 @@
               <a href="#" id="github">Help</a>
             </li>
             <li>
+              <a href="#" id="changelog">Changelog</a>
+            </li>
+            <li>
               <a href="#" id="license">License</a>
             </li>
           </ul>
@@ -114,6 +124,4 @@
   <script src="main.js"></script>
   <!-- endbuild -->
 </body>
-</html>
->
 </html>

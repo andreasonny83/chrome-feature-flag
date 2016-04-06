@@ -52,6 +52,10 @@ We recommend to use Chrome Dev Editor while you're in development mode.
 4. Push to the branch: `git push origin my-new-feature`
 5. Submit a pull request :sunglasses:
 
+## Changelog
+
+Changelog available [here](https://github.com/andreasonny83/chrome-feature-flag/blob/master/CHANGELOG.md)
+
 ## License
 
 [MIT License](https://github.com/andreasonny83/chrome-feature-flag/blob/master/LICENSE) © Andrea SonnY

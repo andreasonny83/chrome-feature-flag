@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.2.3 -
+## 0.2.3 - 2016.04.06
 * add changelog in footer area
 * main.js code refactoring
 * features-list styles updated

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.4 - 2016.04.14
+* introducing feature switches
+* some code optimization
+
 ## 0.2.3 - 2016.04.06
 * add changelog in footer area
 * main.js code refactoring

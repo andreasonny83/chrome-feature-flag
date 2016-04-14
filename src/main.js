@@ -9,6 +9,9 @@
   'use strict';
 
   var features = null;
+  var savedFeatures = [
+    {}
+  ];
   var currentDomain = '';
   var busy = false;
 
@@ -229,6 +232,18 @@
     updateFeatureFlag();
   }
 
+  function toggleFeature(feature) {
+    var el = document.getElementById(feature);
+
+    if (!savedFeatures[feature]) {
+      savedFeatures[feature] = {};
+    }
+
+    savedFeatures[feature].checked = el.checked;
+    savedFeatures[feature].name = feature;
+    console.log(savedFeatures);
+  }
+
   function updateFeatureFlags() {
     var feature;
     var featureName;
@@ -246,14 +261,19 @@
 
       tmpl = document.getElementById('list-element-template').cloneNode(true);
       tmpl.id = 'feature-' + features[feature];
-      tmpl.querySelector('.mdl-switch__label').innerHTML = features[feature];
-      // tmpl.querySelector('.mdl-switch').setAttribute('for', 'list-switch-' + features[feature]);
-      // tmpl.querySelector('.mdl-switch__input').id = 'list-switch-' + features[feature];
+      tmpl.querySelector('.feature__name').innerHTML = features[feature];
+      tmpl.querySelector('.switch').id = 'list-switch-' + features[feature];
+      // tmpl.querySelector('.switch__label').setAttribute('for', 'list-switch-' + features[feature]);
       tmpl.querySelector('.mdl-button').id = 'delete-' + features[feature];
       tmpl.querySelector('.mdl-button').setAttribute('data-feature', features[feature]);
 
       tmpl.querySelector('.mdl-button')
         .addEventListener('click', deleteFeature);
+
+      tmpl.querySelector('.switch')
+        .addEventListener('click', function() {
+          toggleFeature('list-switch-' + features[feature])
+        });
 
       // componentHandler.upgradeDom();
       listContainer.appendChild(tmpl);
@@ -274,6 +294,34 @@
         listedFeatures[i].remove();
       }
     }
+
+    // add saved feature flags in the list
+    // for (feature in savedFeatures) {
+    //   console.log(feature);
+    //   // moving on if the feature is already in list
+    //   if (document.getElementById('feature-' + features[feature])) {
+    //     continue;
+    //   }
+    //
+    //   tmpl = document.getElementById('list-element-template').cloneNode(true);
+    //   tmpl.id = 'feature-' + feature.name;
+    //   tmpl.querySelector('.feature__name').innerHTML = features[feature];
+    //   tmpl.querySelector('.switch').id = 'list-switch-' + features[feature];
+    //   tmpl.querySelector('.switch__label').setAttribute('for', 'list-switch-' + features[feature]);
+    //   tmpl.querySelector('.mdl-button').id = 'delete-' + features[feature];
+    //   tmpl.querySelector('.mdl-button').setAttribute('data-feature', features[feature]);
+    //
+    //   tmpl.querySelector('.mdl-button')
+    //     .addEventListener('click', deleteFeature);
+    //
+    //   tmpl.querySelector('.switch')
+    //     .addEventListener('click', function() {
+    //       toggleFeature('list-switch-' + features[feature])
+    //     });
+    //
+    //   // componentHandler.upgradeDom();
+    //   listContainer.appendChild(tmpl);
+    // }
   }
 
   /**

@@ -62,16 +62,13 @@
           </li>
 
           <li class="busy busy__hide busy--set mdl-list__item" id="list-element-template">
-            <span class="mdl-list__item-primary-content">
-              <!-- <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="checkbox-0"> -->
-                <!-- <input type="checkbox" id="checkbox-0" class="mdl-switch__input" checked> -->
-                <span class="mdl-switch__label"></span>
-              <!-- </label> -->
-              <!-- <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="checkbox-0">
-                <input type="checkbox" id="checkbox-0" class="mdl-checkbox__input">
-                <span class="mdl-checkbox__label"></span>
-              </label> -->
+            <span class="mdl-list__item-primary-content checkbox__container">
+              <input type="checkbox" class="switch hidden">
+              <label class="switch__label"></label>
+              <span class="feature__name"></span>
+              <span class="checkbox__tooltip">Coming Soon!</span>
             </span>
+
             <span class="mdl-list__item-secondary-action">
               <button class="mdl-button mdl-js-button mdl-button--icon">
                 <i class="material-icons">delete</i>

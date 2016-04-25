@@ -1,6 +1,6 @@
 {
   "name": "chrome-feature-flag",
-  "version": "0.3.0",
+  "version": "1.0.0",
   "description": "Feature flag extension for Google Chrome",
   "main": "app/index.html",
   "scripts": {

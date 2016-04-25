@@ -39,7 +39,7 @@ gulp.task('clean', function() {
 
 // edit JSON object by using user specific function
 gulp.task('manifest', function() {
-  gulp.src('./src/manifest.json')
+  return gulp.src('./src/manifest.json')
     .pipe(jeditor(function(json) {
       json.version = pkg.version;
       json.name = pkg.name;

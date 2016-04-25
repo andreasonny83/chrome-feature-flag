@@ -8,14 +8,16 @@
 (function(window, undefined) {
   'use strict';
 
-  var features = null;
-  var savedFeatures = [
-    {}
-  ];
+  var features = [];
+  var savedFeatures = [];
   var currentDomain = '';
   var busy = false;
 
   window.onload = function() {
+    if (!window.PRODUCTION) {
+      document.getElementById('development').classList.add('show');
+    }
+
     document.getElementById('cookieForm')
       .addEventListener('submit', addFeatureFlag);
     document.getElementById('resetBtn')
@@ -158,15 +160,20 @@
     });
   }
 
-  function addFeatureFlag(e) {
+  function addFeatureFlag(e, injectFeature) {
     var featureInput = document.querySelector('#feature-name');
-    var featureName = featureInput.value;
+    var featureName;
     var now = new Date();
     var exHours = 1;
     var expires = new Date(now.getTime() +
       (exHours * 60 * 60 * 1000)).toUTCString();
 
-    e.preventDefault();
+    if (injectFeature) {
+      featureName = injectFeature;
+    } else {
+      e.preventDefault();
+      featureName = featureInput.value;
+    }
 
     // exit if we are still editing the page cookies
     if (busy) {
@@ -209,18 +216,39 @@
     sendCookie('reset', expires);
   }
 
-  function deleteFeature(event) {
-    var targetFeature = document.getElementById(event.target.id) ? document.getElementById(event.target.id).getAttribute('data-feature') : null;
+  /**
+   * Completely remove a feature flag
+   * remove the cookie information and delete the key from the saved features.
+   *
+   * @param  {String} targetFeature   The feature to deactivate
+   *
+   */
+  function deleteFeature(targetFeature) {
+    var index = features.indexOf(targetFeature);
 
-    // if the target element is the icon inside the button,
-    // try to find the 'data-feature' in the parent node
-    if (!targetFeature && !document.getElementById(event.target.parentNode.id)) {
-      // if the parent node doesn't have a 'data-feature' either, do nothing
-      return;
-    } else {
-      targetFeature = document.getElementById(event.target.parentNode.id).getAttribute('data-feature');
+    if (index !== -1) {
+      features.splice(index, 1);
     }
 
+    // remove the saved feature flag
+    index = savedFeatures.indexOf(targetFeature);
+
+    if (index !== -1) {
+      savedFeatures.splice(index, 1);
+    }
+
+    chrome.runtime.sendMessage({action: 'delete_feature', featureName: targetFeature}, function(response) {
+      updateFeatureFlag();
+    });
+  }
+
+  /**
+   * Deactivate the feature flag but keep it in the saved features array
+   *
+   * @param  {String} targetFeature   The feature to deactivate
+   *
+   */
+  function deactivateFeature(targetFeature) {
     var index = features.indexOf(targetFeature);
 
     if (index === -1) {
@@ -233,95 +261,135 @@
   }
 
   function toggleFeature(feature) {
-    var el = document.getElementById(feature);
-
     if (!savedFeatures[feature]) {
-      savedFeatures[feature] = {};
+      savedFeatures.push(feature);
     }
 
-    savedFeatures[feature].checked = el.checked;
-    savedFeatures[feature].name = feature;
-    console.log(savedFeatures);
+    var switchName = ['switch-', feature].join('');
+    var switcClasses = document.getElementById(switchName).classList;
+    var isChecked = Array.prototype.indexOf.call(switcClasses, 'is-checked') !== -1;
+
+    if (isChecked) {
+      addFeatureFlag(null, feature);
+    } else {
+      deactivateFeature(feature);
+    }
+  }
+
+
+  function toggleAction(feature) {
+    setTimeout(function() {
+      toggleFeature(feature);
+    }, 500);
+  }
+
+  function populateFeaturesList(list, saved) {
+    saved = saved || false;
+
+    var feature;
+    var listContainer = document.getElementById('features-list');
+
+    for (feature in list) {
+      // moving on if the feature is already in list
+      if (document.getElementById('feature-' + list[feature])) {
+        continue;
+      }
+
+      var li_element = document.createElement('li');
+      var mdl_primary = document.createElement('span');
+      var mdl_switch = document.createElement('label');
+      var input = document.createElement('input');
+      var span = document.createElement('span');
+      var textNode = document.createTextNode(list[feature]);
+      var mdl_item = document.createElement('span');
+      var button = document.createElement('button');
+      var italic = document.createElement('i');
+      var deleteText = document.createTextNode('delete');
+
+      // Creating the material switch
+      span.className = 'mdl-switch__label';
+      mdl_switch.id = 'switch-' + list[feature];
+      mdl_switch.className = 'mdl-switch mdl-js-switch mdl-js-ripple-effect';
+      mdl_switch.setAttribute('for', 'list-switch-' + list[feature]);
+      input.setAttribute('type', 'checkbox');
+      input.setAttribute('id', 'list-switch-' + list[feature]);
+      input.className = 'mdl-switch__input';
+      mdl_primary.className = 'mdl-list__item-primary-content';
+
+      if (!saved) {
+        input.setAttribute('checked', 'true');
+      }
+
+      // Creating the delete button
+      italic.className = 'material-icons';
+      mdl_item.className = 'mdl-list__item-secondary-action';
+      button.className = 'mdl-button mdl-js-button mdl-button--icon';
+      button.id = 'delete-' + list[feature];
+
+      // Adding EventListeners avoiding the infamous asynchronous loop problem
+      (function(feature) {
+        button.addEventListener('click', function() {
+          deleteFeature(feature);
+        });
+        input.addEventListener('click', function() {
+          componentHandler.upgradeElement(mdl_switch);
+          toggleAction(feature);
+        });
+      })(list[feature]);
+
+      // Creating a new list element
+      li_element.className = 'busy busy__hide busy--set mdl-list__item';
+      li_element.id = 'feature-' + list[feature];
+
+      span.appendChild(textNode);
+      italic.appendChild(deleteText);
+      button.appendChild(italic);
+      mdl_item.appendChild(button);
+      mdl_switch.appendChild(span);
+      mdl_switch.appendChild(input);
+      mdl_primary.appendChild(mdl_switch);
+      li_element.appendChild(mdl_primary);
+      li_element.appendChild(mdl_item);
+      listContainer.appendChild(li_element);
+
+      // updating the DOM
+      componentHandler.upgradeElement(mdl_switch);
+      componentHandler.upgradeElement(mdl_item);
+    }
   }
 
   function updateFeatureFlags() {
-    var feature;
     var featureName;
     var listContainer = document.getElementById('features-list');
     var tmpl;
     var listedFeatures;
     var i;
 
-    // add new feature flags in the list
-    for (feature in features) {
-      // moving on if the feature is already in list
-      if (document.getElementById('feature-' + features[feature])) {
-        continue;
+    // display active feature flags on the list
+    populateFeaturesList(features);
+
+    chrome.runtime.sendMessage({action: 'update_features', features: features}, function(response) {
+      savedFeatures = [];
+      savedFeatures = response.update_features;
+
+      populateFeaturesList(savedFeatures, true);
+
+      // remove feature flags from the list
+      listedFeatures = listContainer.querySelectorAll('.mdl-list__item');
+
+      for (i = 0; i < listedFeatures.length; i++) {
+        featureName = listedFeatures[i].id.split('feature-')[1] || null;
+
+        if (!featureName) {
+          continue;
+        }
+
+        if (features.indexOf(featureName) === -1 && savedFeatures.indexOf(featureName) === -1) {
+          // the feature flag is not present in the cookie any more
+          listedFeatures[i].remove();
+        }
       }
-
-      tmpl = document.getElementById('list-element-template').cloneNode(true);
-      tmpl.id = 'feature-' + features[feature];
-      tmpl.querySelector('.feature__name').innerHTML = features[feature];
-      tmpl.querySelector('.switch').id = 'list-switch-' + features[feature];
-      // tmpl.querySelector('.switch__label').setAttribute('for', 'list-switch-' + features[feature]);
-      tmpl.querySelector('.mdl-button').id = 'delete-' + features[feature];
-      tmpl.querySelector('.mdl-button').setAttribute('data-feature', features[feature]);
-
-      tmpl.querySelector('.mdl-button')
-        .addEventListener('click', deleteFeature);
-
-      tmpl.querySelector('.switch')
-        .addEventListener('click', function() {
-          toggleFeature('list-switch-' + features[feature])
-        });
-
-      // componentHandler.upgradeDom();
-      listContainer.appendChild(tmpl);
-    }
-
-    // remove feature flags from the list
-    listedFeatures = document.getElementById('features-list').querySelectorAll('.mdl-list__item');
-
-    for (i = 0; i < listedFeatures.length; i++) {
-      featureName = listedFeatures[i].id.split('feature-')[1] || null;
-
-      if (!featureName) {
-        continue;
-      }
-
-      if (features.indexOf(featureName) < 0) {
-        // the feature flag is not present in the cookie any more
-        listedFeatures[i].remove();
-      }
-    }
-
-    // add saved feature flags in the list
-    // for (feature in savedFeatures) {
-    //   console.log(feature);
-    //   // moving on if the feature is already in list
-    //   if (document.getElementById('feature-' + features[feature])) {
-    //     continue;
-    //   }
-    //
-    //   tmpl = document.getElementById('list-element-template').cloneNode(true);
-    //   tmpl.id = 'feature-' + feature.name;
-    //   tmpl.querySelector('.feature__name').innerHTML = features[feature];
-    //   tmpl.querySelector('.switch').id = 'list-switch-' + features[feature];
-    //   tmpl.querySelector('.switch__label').setAttribute('for', 'list-switch-' + features[feature]);
-    //   tmpl.querySelector('.mdl-button').id = 'delete-' + features[feature];
-    //   tmpl.querySelector('.mdl-button').setAttribute('data-feature', features[feature]);
-    //
-    //   tmpl.querySelector('.mdl-button')
-    //     .addEventListener('click', deleteFeature);
-    //
-    //   tmpl.querySelector('.switch')
-    //     .addEventListener('click', function() {
-    //       toggleFeature('list-switch-' + features[feature])
-    //     });
-    //
-    //   // componentHandler.upgradeDom();
-    //   listContainer.appendChild(tmpl);
-    // }
+    });
   }
 
   /**

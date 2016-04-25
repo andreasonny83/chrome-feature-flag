@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.0 - 2016.04.25
+* feature switches implementation
+* theme updated
+* development mode
+* new icon for development mode
+* background script implemented in `manifest.json`
+* Gulp task optimize to remove the development mode on build
+* Gulp code optimized
+* code refactoring
+
 ## 0.2.4 - 2016.04.14
 * introducing feature switches
 * some code optimization

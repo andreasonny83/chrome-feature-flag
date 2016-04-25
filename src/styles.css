@@ -16,15 +16,21 @@ h1 {
   margin: 15 0;
 }
 
+#development {
+  display: none;
+  font-size: 16px;
+  color: brown;
+}
+
+#development.show {
+  display: inline-block;
+}
+
 #features-list {
   height: 168px;
   overflow: auto;
   margin-top: 17px;
   padding: 0;
-}
-
-#list-element-template {
-  display: none;
 }
 
 #cookieForm {

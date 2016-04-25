@@ -11,17 +11,17 @@
 </head>
 
 <body class="mdl-base mdl-base__container">
-  <div class="mdl-layout mdl-js-layout">
+  <div class="mdl-layout mdl-js-layout mdl-color--grey-200 mdl-color-text--grey-800">
 
     <main class="mdl-layout__content">
 
-      <h1 class="mdl-typography--text-center mdl-color-text--teal-600">
-        Feature Flags
+      <h1 class="mdl-typography--text-center mdl-color-text--grey-800">
+        Feature Flags <span id="development">Development</span>
       </h1>
 
       <div class="mdl-grid">
         <form id="cookieForm" class="mdl-grid mdl-cell mdl-cell--4-col">
-          <h4 class="mdl-cell mdl-cell--4-col mdl-color-text--teal-500">
+          <h4 class="mdl-cell mdl-cell--4-col mdl-color-text--grey-800">
             Enable feature flag
           </h4>
 
@@ -31,7 +31,7 @@
 
             <div class="busy busy__hide busy--set mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
               <input class="mdl-textfield__input" type="text" id="feature-name" pattern="[A-Za-z0-9\-\_]{1,}">
-              <label class="mdl-textfield__label mdl-color-text--teal-500" for="feature-name">
+              <label class="mdl-textfield__label mdl-color-text--grey-800" for="feature-name">
                 Feature name
               </label>
               <span class="mdl-textfield__error">Invalid feature flag format</span>
@@ -40,7 +40,7 @@
 
           <div class="mdl-cell mdl-cell--1-col mdl-typography--text-right">
             <button type="submit" id="addFeature"
-              class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored mdl-js-ripple-effect mdl-color--indigo">
+              class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored mdl-js-ripple-effect mdl-color--indigo-500">
               <i class="material-icons">add</i>
             </button>
           </div>
@@ -49,7 +49,7 @@
 
         <div class="mdl-grid mdl-grid--no-spacing mdl-typography--text-right">
           <button id="resetBtn"
-            class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent mdl-cell mdl-cell--4-col">
+            class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent mdl-cell mdl-cell--4-col mdl-color--red-600">
             Reset feature flags
           </button>
         </div>
@@ -60,21 +60,6 @@
           <li class="busy busy__show busy--set">
             <div class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></div>
           </li>
-
-          <li class="busy busy__hide busy--set mdl-list__item" id="list-element-template">
-            <span class="mdl-list__item-primary-content checkbox__container">
-              <input type="checkbox" class="switch hidden">
-              <label class="switch__label"></label>
-              <span class="feature__name"></span>
-              <span class="checkbox__tooltip">Coming Soon!</span>
-            </span>
-
-            <span class="mdl-list__item-secondary-action">
-              <button class="mdl-button mdl-js-button mdl-button--icon">
-                <i class="material-icons">delete</i>
-              </button>
-            </span>
-          </li>
         </ul>
 
       </div>
@@ -83,7 +68,7 @@
         <div class="mdl-mini-footer__left-section">
           <div class="mdl-logo">
             Chrome Feature Flags v.<span id="version"></span><br>
-            Developed by <a href="#" id="author" class="mdl-color-text--teal-500">andreasonny83</a>
+            Developed by <a href="#" id="author" class="mdl-color-text--grey-300">andreasonny83</a>
           </div>
           <ul class="mdl-mini-footer__link-list">
             <li>

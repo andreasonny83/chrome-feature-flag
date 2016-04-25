@@ -10,7 +10,7 @@
     "16": "assets/icon-16-dev.png",
     "32": "assets/icon-32-dev.png",
     "128": "assets/icon-128-dev.png",
-    "512": "assets/web_hi_res_512-dev.png"
+    "512": "assets/icon-512-dev.png"
   },
 
   "browser_action": {

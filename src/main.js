@@ -5,7 +5,7 @@
  * @copyright 2016 @andreasonny83
  * @link https://github.com/andreasonny83/chrome-feature-flag
  */
-(function(window, undefined) {
+(function(window) {
   'use strict';
 
   var features = [];

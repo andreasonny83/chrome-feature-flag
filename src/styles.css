@@ -59,6 +59,10 @@ h1 {
 /* Footer */
 .mdl-mini-footer {
   padding: 16px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
 
 .mdl-mini-footer .mdl-logo {

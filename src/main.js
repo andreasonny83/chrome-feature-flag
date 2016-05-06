@@ -12,6 +12,7 @@
   var savedFeatures = [];
   var currentDomain = '';
   var busy = false;
+  var currentURL;
 
   window.onload = function() {
     if (!window.PRODUCTION) {
@@ -40,6 +41,20 @@
       .addEventListener('click', email);
 
     document.getElementById('version').innerHTML = chrome.app.getDetails().version;
+
+    chrome.tabs.getSelected(null, function(tab) {
+       currentURL = tab.url;
+    });
+
+    /**
+     * Update the feature list every time a cookie change is detected
+     * on the current page
+     */
+    chrome.runtime.onMessage.addListener(function(request) {
+      if (request.action === 'tab_refresh' && request.tabId === currentURL) {
+        readCookie(updateFeatureFlags);
+      }
+    });
 
     readCookie(updateFeatureFlags);
   };
@@ -237,7 +252,7 @@
       savedFeatures.splice(index, 1);
     }
 
-    chrome.runtime.sendMessage({action: 'delete_feature', featureName: targetFeature}, function(response) {
+    chrome.runtime.sendMessage({action: 'delete_feature', featureName: targetFeature}, function() {
       updateFeatureFlag();
     });
   }
@@ -361,7 +376,6 @@
   function updateFeatureFlags() {
     var featureName;
     var listContainer = document.getElementById('features-list');
-    var tmpl;
     var listedFeatures;
     var i;
 
@@ -405,9 +419,6 @@
     }, function() {
       // Reload the page as the cookie has been injected
       chrome.tabs.reload();
-
-      // Read the cookies to update the feature flag list
-      readCookie(updateFeatureFlags);
     });
   }
 })(window || self);

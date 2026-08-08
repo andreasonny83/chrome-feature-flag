@@ -22,6 +22,10 @@ function deleteFeature(feature) {
 
 // update the feature flags
 function updateFeatures(features) {
+  if (!features || features.length === 0) {
+    savedFeatures = [];
+    return;
+  }
   var i;
 
   for(i = 0; i < features.length; i++) {

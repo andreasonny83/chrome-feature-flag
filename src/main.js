@@ -1,8 +1,7 @@
 /**
  * Feature Flags - Google Chrome extension
  *
- * @license MIT - http://andreasonny.mit-license.org/2016
- * @copyright 2016 @andreasonny83
+ * @copyright 2026 @andreasonny83
  * @link https://github.com/andreasonny83/chrome-feature-flag
  */
 (function(window, undefined) {
@@ -22,6 +21,8 @@
       .addEventListener('submit', addFeatureFlag);
     document.getElementById('resetBtn')
       .addEventListener('click', resetFeatureFlag);
+    document.getElementById('grantAccess')
+      .addEventListener('click', requestHostPermission);
     document.getElementById('github')
       .addEventListener('click', gitHubRepo);
     document.getElementById('author')
@@ -30,18 +31,16 @@
       .addEventListener('click', changelog);
     document.getElementById('license')
       .addEventListener('click', gitHubLicense);
-    document.getElementById('demo')
-      .addEventListener('click', demoSandbox);
     document.getElementById('footer-github')
       .addEventListener('click', gitHubRepo);
-    document.getElementById('footer-google')
-      .addEventListener('click', googlePlus);
     document.getElementById('footer-email')
       .addEventListener('click', email);
 
-    document.getElementById('version').innerHTML = chrome.app.getDetails().version;
+    document.getElementById('version').innerHTML = chrome.runtime.getManifest().version;
 
-    readCookie(updateFeatureFlags);
+    readCookie(function(done) {
+      updateFeatureFlags(done);
+    });
   };
 
   function gitHubRepo() {
@@ -59,14 +58,7 @@
   }
 
   function gitHubLicense() {
-    var url = 'http://andreasonny.mit-license.org/2016';
-    chrome.tabs.create({
-      url: url
-    });
-  }
-
-  function demoSandbox() {
-    var url = 'http://sonnywebdesign.com/feature-flag-demo/';
+    var url = 'http://andreasonny.mit-license.org/2026';
     chrome.tabs.create({
       url: url
     });
@@ -74,13 +66,6 @@
 
   function changelog() {
     var url = 'https://github.com/andreasonny83/chrome-feature-flag/blob/master/CHANGELOG.md';
-    chrome.tabs.create({
-      url: url
-    });
-  }
-
-  function googlePlus() {
-    var url = 'https://plus.google.com/u/0/+AndreaSonny';
     chrome.tabs.create({
       url: url
     });
@@ -115,6 +100,104 @@
     }
   }
 
+  /**
+   * Ensure the extension has host permission for the given tab URL,
+   * prompting the user to grant it if it hasn't been granted yet.
+   * cookies API access requires an actual host permission grant;
+   * activeTab alone does not cover it.
+   *
+   * @param  {String}   url   The tab URL to request permission for.
+   * @param  {Function} cb    Called with (granted: bool).
+   */
+  // chrome.permissions.request() must be called synchronously inside a
+  // real click handler - it cannot be triggered from nested chrome.* API
+  // callbacks, even if those callbacks originated from a click. So this
+  // only checks for the permission; requesting it happens in
+  // requestHostPermission(), wired to the #grantAccess button click.
+  var pendingPermissionOrigin = null;
+
+  function getOriginPattern(url) {
+    try {
+      return new URL(url).origin + '/*';
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function hasHostPermission(url, cb) {
+    var origin = getOriginPattern(url);
+
+    if (!origin) {
+      return cb(false);
+    }
+
+    chrome.permissions.contains({origins: [origin]}, cb);
+  }
+
+  function showPermissionPrompt(url) {
+    pendingPermissionOrigin = getOriginPattern(url);
+    document.getElementById('permission-request').style.display = '';
+  }
+
+  function hidePermissionPrompt() {
+    pendingPermissionOrigin = null;
+    document.getElementById('permission-request').style.display = 'none';
+  }
+
+  function requestHostPermission(e) {
+    e.preventDefault();
+
+    if (!pendingPermissionOrigin) {
+      return;
+    }
+
+    chrome.permissions.request({origins: [pendingPermissionOrigin]}, function(granted) {
+      if (granted) {
+        hidePermissionPrompt();
+        readCookie(function(done) {
+          updateFeatureFlags(done);
+        });
+      }
+    });
+  }
+
+  /**
+   * Merge the currently active features into the persisted saved features
+   * list. The actual chrome.storage.local write happens in eventPage.js
+   * (the background service worker), not here - that way the write still
+   * completes even if this popup closes (e.g. from a tab reload) right
+   * after sending the message.
+   *
+   * @param  {Array}    activeFeatures  Features currently active in the cookie.
+   * @param  {Function} cb              Called with the updated saved features array.
+   */
+  function updateSavedFeatures(activeFeatures, cb) {
+    chrome.runtime.sendMessage({action: 'update_features', features: activeFeatures}, function(response) {
+      cb(response.update_features);
+    });
+  }
+
+  /**
+   * Remove a feature from the persisted saved features list.
+   *
+   * @param  {String}   targetFeature   The feature to forget.
+   * @param  {Function} cb              Called with the updated saved features array.
+   */
+  function deleteSavedFeature(targetFeature, cb) {
+    chrome.runtime.sendMessage({action: 'delete_feature', featureName: targetFeature}, function(response) {
+      cb(response.delete_features);
+    });
+  }
+
+  /**
+   * @param {Function} cb  Called with a `done` callback once the cookie has
+   *                       been read. `cb` must call `done()` once it has
+   *                       finished its own (possibly async) work updating
+   *                       the UI, so the busy spinner isn't cleared - and
+   *                       elements created afterwards left permanently
+   *                       hidden by the .busy__hide.busy--set CSS rule -
+   *                       before that work actually completes.
+   */
   function readCookie(cb) {
     if (busy) {
       return false;
@@ -122,13 +205,12 @@
 
     setBusy(true);
 
-    readCookieInit(cb);
-
-    setTimeout(function() {
-      readCookieInit(cb);
-      setBusy(false);
-      document.querySelector('#feature-name').focus();
-    }, 1000);
+    readCookieInit(function() {
+      cb(function() {
+        setBusy(false);
+        document.querySelector('#feature-name').focus();
+      });
+    });
   }
 
   function readCookieInit(cb) {
@@ -143,19 +225,29 @@
       activeTab = arrayOfTabs[0];
       currentDomain = activeTab && arrayOfTabs[0].url ? arrayOfTabs[0].url : currentDomain;
 
-      chrome.cookies.get({
-        'url': currentDomain,
-        'name': 'features'
-      }, function(cookie) {
-        features = (cookie && cookie.value) ? cookie.value.split(',') : '';
-
-        resetIndex = features.indexOf('reset');
-
-        if (resetIndex !== -1) {
-          features.splice(resetIndex, 1);
+      hasHostPermission(currentDomain, function(granted) {
+        if (!granted) {
+          features = '';
+          showPermissionPrompt(currentDomain);
+          return cb();
         }
 
-        return cb();
+        hidePermissionPrompt();
+
+        chrome.cookies.get({
+          'url': currentDomain,
+          'name': 'features'
+        }, function(cookie) {
+          features = (cookie && cookie.value) ? cookie.value.split(',') : '';
+
+          resetIndex = features.indexOf('reset');
+
+          if (resetIndex !== -1) {
+            features.splice(resetIndex, 1);
+          }
+
+          return cb();
+        });
       });
     });
   }
@@ -237,7 +329,7 @@
       savedFeatures.splice(index, 1);
     }
 
-    chrome.runtime.sendMessage({action: 'delete_feature', featureName: targetFeature}, function(response) {
+    deleteSavedFeature(targetFeature, function() {
       updateFeatureFlag();
     });
   }
@@ -283,6 +375,33 @@
     }, 500);
   }
 
+  /**
+   * Sync an already-rendered switch's visual state (checked/unchecked) with
+   * whether the feature is currently active. Needed because
+   * populateFeaturesList() skips re-creating elements that already exist -
+   * without this, a feature deactivated via Reset (or toggled off) keeps
+   * showing as "on" in the popup even though it's no longer active.
+   *
+   * @param {String}  feature  The feature name.
+   * @param {Boolean} active   Whether the feature should show as active.
+   */
+  function syncSwitchState(feature, active) {
+    var input = document.getElementById('list-switch-' + feature);
+    var mdlSwitch = document.getElementById('switch-' + feature);
+
+    if (!input || !mdlSwitch) {
+      return;
+    }
+
+    input.checked = active;
+
+    if (active) {
+      mdlSwitch.classList.add('is-checked');
+    } else {
+      mdlSwitch.classList.remove('is-checked');
+    }
+  }
+
   function populateFeaturesList(list, saved) {
     saved = saved || false;
 
@@ -290,8 +409,13 @@
     var listContainer = document.getElementById('features-list');
 
     for (feature in list) {
-      // moving on if the feature is already in list
+      // sync the switch state if the feature is already in the list,
+      // since it may have flipped between active and saved-only. Checked
+      // against the current active `features` array (not the `saved` flag
+      // of this pass), since `list` here may be `savedFeatures`, which
+      // includes both active and inactive feature names.
       if (document.getElementById('feature-' + list[feature])) {
+        syncSwitchState(list[feature], features.indexOf(list[feature]) !== -1);
         continue;
       }
 
@@ -358,7 +482,7 @@
     }
   }
 
-  function updateFeatureFlags() {
+  function updateFeatureFlags(cb) {
     var featureName;
     var listContainer = document.getElementById('features-list');
     var tmpl;
@@ -368,9 +492,8 @@
     // display active feature flags on the list
     populateFeaturesList(features);
 
-    chrome.runtime.sendMessage({action: 'update_features', features: features}, function(response) {
-      savedFeatures = [];
-      savedFeatures = response.update_features;
+    updateSavedFeatures(features, function(updatedSavedFeatures) {
+      savedFeatures = updatedSavedFeatures;
 
       populateFeaturesList(savedFeatures, true);
 
@@ -389,6 +512,10 @@
           listedFeatures[i].remove();
         }
       }
+
+      if (cb) {
+        cb();
+      }
     });
   }
 
@@ -399,15 +526,33 @@
    *  @param {String} expires       cookie expiration time in seconds
    */
   function sendCookie(featureName, expires) {
-    chrome.tabs.executeScript({
-      code: 'document.cookie="features=' + featureName +
-        '; expires=' + expires + '; path=/";'
-    }, function() {
-      // Reload the page as the cookie has been injected
-      chrome.tabs.reload();
+    chrome.tabs.query({
+      active: true,
+      currentWindow: true
+    }, function(arrayOfTabs) {
+      var tabId = arrayOfTabs[0].id;
 
-      // Read the cookies to update the feature flag list
-      readCookie(updateFeatureFlags);
+      chrome.scripting.executeScript({
+        target: {tabId: tabId},
+        func: setCookie,
+        args: [featureName, expires]
+      }, function() {
+        // Persist the updated feature list *before* reloading. Reloading
+        // closes the popup immediately (Chrome closes action popups
+        // whenever the tab they're anchored to navigates), which can cut
+        // off the chrome.storage write mid-flight and randomly drop a
+        // saved feature if it happens the other way around.
+        readCookie(function(done) {
+          updateFeatureFlags(function() {
+            done();
+            chrome.tabs.reload(tabId);
+          });
+        });
+      });
     });
+  }
+
+  function setCookie(featureName, expires) {
+    document.cookie = 'features=' + featureName + '; expires=' + expires + '; path=/';
   }
 })(window || self);

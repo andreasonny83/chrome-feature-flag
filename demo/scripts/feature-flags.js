@@ -1,5 +1,5 @@
 /**
- * Copyright 2016 andreasonny83. All Rights Reserved.
+ * Copyright 2026 andreasonny83. All Rights Reserved.
  *
  * Licensed under the MIT License
  * you may not use this file except in compliance with the License.

@@ -1,13 +1,11 @@
 /**
  * Feature Flags - Google Chrome extension
  *
- * @license MIT - http://andreasonny.mit-license.org/@2016/
- * @copyright 2016 @andreasonny83
+ * @copyright 2026 @andreasonny83
  * @link https://github.com/andreasonny83/chrome-feature-flag
  */
 
 var gulp = require('gulp');
-var runSequence = require('run-sequence');
 var usemin = require('gulp-usemin');
 var cssnano = require('gulp-cssnano');
 var uglify = require('gulp-uglify');
@@ -18,7 +16,7 @@ var strip = require('gulp-strip-comments');
 var jeditor = require('gulp-json-editor');
 var del = require('del');
 var pkg = require('./package.json');
-var zip = require('gulp-zip');
+var zip = require('gulp-zip').default;
 
 var AUTOPREFIXER = [
   'last 2 versions'
@@ -28,7 +26,7 @@ var VERSION_BANNER = ['',
   ' * Feature Flags - Google Chrome extension',
   ' * version v.' + pkg.version,
   ' * created by ' + pkg.author,
-  ' * license ' + pkg.license + ' - http://andreasonny.mit-license.org/@2016/',
+  ' * license ' + pkg.license + ' - http://andreasonny.mit-license.org/@2026/',
 ''].join('\n');
 
 gulp.task('clean', function() {
@@ -103,21 +101,21 @@ gulp.task('minifyHtml', function() {
 gulp.task('fonts', function() {
   return gulp.src([
     'src/lib/font-awesome/fonts/*.*'
-  ])
+  ], { encoding: false })
   .pipe(gulp.dest('dist/fonts'));
 });
 
-gulp.task('copy', ['fonts'], function() {
+gulp.task('copy', gulp.series('fonts', function copy() {
   return gulp.src([
     'src/assets/**/*',
     'src/eventPage.js'
-  ],{ 'base' : 'src/' })
+  ],{ 'base' : 'src/', encoding: false })
   .pipe(gulp.dest('dist'));
-});
+}));
 
 // Create a distribution zip version to upload into the Chrome web store
 gulp.task('zip', function() {
-  return gulp.src('dist/**/*')
+  return gulp.src('dist/**/*', { encoding: false })
   .pipe(zip([
     pkg.name,
     pkg.version,
@@ -127,13 +125,11 @@ gulp.task('zip', function() {
 });
 
 // Minify all the files and prepare a new releaase version
-gulp.task('default', ['clean'], function(cb) {
-  runSequence(
-    'minify',
-    'minifyHtml',
-    'copy',
-    'manifest',
-    'zip',
-    cb
-  );
-});
+gulp.task('default', gulp.series(
+  'clean',
+  'minify',
+  'minifyHtml',
+  'copy',
+  'manifest',
+  'zip'
+));

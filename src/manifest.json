@@ -1,10 +1,10 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "Feature flags - Development",
   "short_name": "Feature flags",
   "description": "Feature flag extension for Google Chrome",
   "version": "0.0.0",
-  "minimum_chrome_version": "38",
+  "minimum_chrome_version": "102",
 
   "icons": {
     "16": "assets/icon-16-dev.png",
@@ -13,21 +13,23 @@
     "512": "assets/icon-512-dev.png"
   },
 
-  "browser_action": {
+  "action": {
     "default_popup": "index.html",
     "default_title": "Feature flags"
   },
 
   "background": {
-    "scripts": ["eventPage.js"],
-    "persistent": true
+    "service_worker": "eventPage.js"
   },
 
   "permissions": [
     "activeTab",
-    "tabs",
     "cookies",
-    "background",
+    "scripting",
+    "storage"
+  ],
+
+  "optional_host_permissions": [
     "http://*/*",
     "https://*/*"
   ]

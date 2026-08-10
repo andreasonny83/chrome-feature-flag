@@ -2,8 +2,6 @@
 
 A Chrome extension for managing websites feature flags
 
-Demo website available at: [sonnywebdesign.com/feature-flag-demo](http://sonnywebdesign.com/feature-flag-demo).
-
 ![Feature flag hero](https://raw.githubusercontent.com/andreasonny83/chrome-feature-flag/master/doc/featureflag-hero.0.2.0.jpg)
 
 ## Usage
@@ -22,18 +20,21 @@ This project uses Npm and Gulp for generating a distribution package.
 
 Prepare your environment cloning this repository on your local machine, then open a terminal pointing to your project root directory and install all the dependencies with:
 
-    npm install
+```
+$ npm install
+```
 
 Now you can start developing your `Chrome Feature Flags` editng the source files inside the `src` folder.
 Once done, run:
 
-    gulp
+```sh
+$ npm run build
+```
 
 This will create a distribution `dist` folder inside your project root directory. Gulp will also create a zipped distribution file inside your `dist` folder to use inside the Chrome web store if you need to deploy the extension to the global market.
 
 You can use this generated `dist` directly inside your Google Chrome.
 Just open Chrome, click on Settings, then go to the Extensions tab and tick the `developer mode` checkbox. Now you can simply drag your `dist` folder inside to add your extension to Chrome.
-
 
 ## Developing with Chrome Dev Editor
 
